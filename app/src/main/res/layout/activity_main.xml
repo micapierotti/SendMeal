@@ -1,18 +1,156 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/nombre"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:ems="10"
+        android:hint="Nombre"
+        android:inputType="textPersonName"
+        tools:visibility="visible" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <EditText
+        android:id="@+id/contrasenia"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Contraseña"
+        android:inputType="textPassword" />
+
+    <EditText
+        android:id="@+id/contrasenia2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Repetir contraseña"
+        android:inputType="textPassword" />
+
+    <EditText
+        android:id="@+id/email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="E-mail"
+        android:inputType="textEmailAddress" />
+
+    <TextView
+        android:id="@+id/tipo_tarjeta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tipo de tarjeta:" />
+
+    <LinearLayout
+        android:id="@+id/rg1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:id="@+id/rb1"
+            android:layout_width="201dp"
+            android:layout_height="wrap_content"
+            android:text="Débito" />
+
+        <RadioButton
+            android:id="@+id/rb2"
+            android:layout_width="212dp"
+            android:layout_height="wrap_content"
+            android:text="Crédito" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/nrotarjeta"
+            android:layout_width="296dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Número de tarjeta"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/ccv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="CCV"
+            android:inputType="number" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/fecha_venc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Fecha de vencimiento:" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/fecha_mes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Mes"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/fecha_anio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Año"
+            android:inputType="number" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/cbu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="CBU"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/cbualias"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Alias CBU"
+        android:inputType="textPersonName" />
+
+    <Switch
+        android:id="@+id/carga_inicial"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="¿Realizar carga inicial?" />
+
+    <SeekBar
+        android:id="@+id/carga_inicial"
+        android:layout_width="match_parent"
+        android:layout_height="42dp" />
+
+    <CheckBox
+        android:id="@+id/term_cond"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="Acepto los términos y condiciones" />
+
+    <Button
+        android:id="@+id/registrar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="REGISTRAR" />
+
+</LinearLayout>
