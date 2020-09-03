@@ -11,38 +11,38 @@
         android:id="@+id/nombre"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:autofillHints=""
         android:ems="10"
         android:hint="@string/nombre"
         android:inputType="textPersonName"
-        tools:visibility="visible"
-        android:autofillHints="" />
+        tools:visibility="visible" />
 
     <EditText
         android:id="@+id/contrasenia"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:autofillHints=""
         android:ems="10"
         android:hint="@string/contrase_a"
-        android:inputType="textPassword"
-        android:autofillHints="" />
+        android:inputType="textPassword" />
 
     <EditText
         android:id="@+id/contrasenia2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:autofillHints=""
         android:ems="10"
         android:hint="@string/repetir_contrase_a"
-        android:inputType="textPassword"
-        android:autofillHints="" />
+        android:inputType="textPassword" />
 
     <EditText
         android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:autofillHints=""
         android:ems="10"
         android:hint="@string/e_mail"
-        android:inputType="textEmailAddress"
-        android:autofillHints="" />
+        android:inputType="textEmailAddress" />
 
     <TextView
         android:id="@+id/tipo_tarjeta"
@@ -50,10 +50,11 @@
         android:layout_height="wrap_content"
         android:text="@string/tipo_de_tarjeta" />
 
-    <LinearLayout
+    <RadioGroup
         android:id="@+id/rg1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <RadioButton
             android:id="@+id/rb1"
@@ -66,7 +67,7 @@
             android:layout_width="212dp"
             android:layout_height="wrap_content"
             android:text="@string/cr_dito" />
-    </LinearLayout>
+    </RadioGroup>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -77,19 +78,19 @@
             android:id="@+id/nrotarjeta"
             android:layout_width="296dp"
             android:layout_height="wrap_content"
+            android:autofillHints=""
             android:ems="10"
             android:hint="@string/n_mero_de_tarjeta"
-            android:inputType="number"
-            android:autofillHints="" />
+            android:inputType="number" />
 
         <EditText
             android:id="@+id/ccv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:autofillHints=""
             android:ems="10"
             android:hint="@string/ccv"
-            android:inputType="number"
-            android:autofillHints="" />
+            android:inputType="number" />
     </LinearLayout>
 
     <TextView
@@ -107,38 +108,38 @@
             android:id="@+id/fecha_mes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:autofillHints=""
             android:ems="10"
             android:hint="@string/mes"
-            android:inputType="number"
-            android:autofillHints="" />
+            android:inputType="number" />
 
         <EditText
             android:id="@+id/fecha_anio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:autofillHints=""
             android:ems="10"
             android:hint="@string/a_o"
-            android:inputType="number"
-            android:autofillHints="" />
+            android:inputType="number" />
     </LinearLayout>
 
     <EditText
         android:id="@+id/cbu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:autofillHints=""
         android:ems="10"
         android:hint="@string/cbu"
-        android:inputType="number"
-        android:autofillHints="" />
+        android:inputType="number" />
 
     <EditText
         android:id="@+id/cbualias"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:autofillHints=""
         android:ems="10"
         android:hint="@string/alias_cbu"
-        android:inputType="textPersonName"
-        android:autofillHints="" />
+        android:inputType="textPersonName" />
 
     <Switch
         android:id="@+id/carga_inicial"
