@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
+    //
     EditText etNombre,etPassword,etPassword2, etEmail, etNumeroTarjeta, etCCV,etMes,etAnio,etCBU,etAlias;
     Button btnRegistrar;
     RadioGroup rg1;
