@@ -9,13 +9,13 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         RadioGroup.OnCheckedChangeListener radioListenerRG1 = new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                activarRegistrar(etNombre,etPassword,etPassword2,etEmail,etCCV,etMes,etAnio,cbAcepto,btnRegistrar);
+                activarRegistrar(etNombre,etPassword,etPassword2,etEmail,etCCV,etMes,etAnio,cbAcepto,btnRegistrar,rg1);
                 switch (i){
                     case R.id.rb1:
                         rb2.setEnabled(false);
@@ -70,6 +70,66 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
+
+        rg1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                activarRegistrar(etNombre,etPassword,etPassword2,etEmail,etCCV,etMes,etAnio,cbAcepto,btnRegistrar,rg1);
+            }
+        });
+
+        etNombre.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void onTextChanged(CharSequence cs, int i, int i1, int i2) {
+                activarRegistrar(etNombre,etPassword,etPassword2,etEmail,etCCV,etMes,etAnio,cbAcepto,btnRegistrar,rg1);
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
+
+
+        etEmail.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void onTextChanged(CharSequence cs, int i, int i1, int i2) {
+                activarRegistrar(etNombre,etPassword,etPassword2,etEmail,etCCV,etMes,etAnio,cbAcepto,btnRegistrar,rg1);
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
+
+        etPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void onTextChanged(CharSequence cs, int i, int i1, int i2) {
+                activarRegistrar(etNombre,etPassword,etPassword2,etEmail,etCCV,etMes,etAnio,cbAcepto,btnRegistrar,rg1);
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
+
+        etPassword2.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void onTextChanged(CharSequence cs, int i, int i1, int i2) {
+                activarRegistrar(etNombre,etPassword,etPassword2,etEmail,etCCV,etMes,etAnio,cbAcepto,btnRegistrar,rg1);
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
 
         etNumeroTarjeta.addTextChangedListener(new TextWatcher() {
             @Override
@@ -83,8 +143,7 @@ public class MainActivity extends AppCompatActivity {
                     etCCV.setEnabled(true);
                     etMes.setEnabled(true);
                     etAnio.setEnabled(true);
-
-                    activarRegistrar(etNombre,etPassword,etPassword2,etEmail,etCCV,etMes,etAnio,cbAcepto,btnRegistrar);
+                    activarRegistrar(etNombre,etPassword,etPassword2,etEmail,etCCV,etMes,etAnio,cbAcepto,btnRegistrar,rg1);
                 }else{
                     etCCV.setEnabled(false);
                     etCCV.setText("");
@@ -92,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
                     etMes.setText("");
                     etAnio.setEnabled(false);
                     etAnio.setText("");
+                    btnRegistrar.setEnabled(false);
                 }
             }
 
@@ -101,14 +161,71 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        etCCV.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void onTextChanged(CharSequence cs, int i, int i1, int i2) {
+                activarRegistrar(etNombre,etPassword,etPassword2,etEmail,etCCV,etMes,etAnio,cbAcepto,btnRegistrar,rg1);
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
+
+        etMes.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void onTextChanged(CharSequence cs, int i, int i1, int i2) {
+                activarRegistrar(etNombre,etPassword,etPassword2,etEmail,etCCV,etMes,etAnio,cbAcepto,btnRegistrar,rg1);
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
+
+        etAnio.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void onTextChanged(CharSequence cs, int i, int i1, int i2) {
+                activarRegistrar(etNombre,etPassword,etPassword2,etEmail,etCCV,etMes,etAnio,cbAcepto,btnRegistrar,rg1);
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
+
+        sCargaInicial.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(sCargaInicial.isChecked()) sbMonto.setVisibility(View.VISIBLE);
+                else sbMonto.setVisibility(View.GONE);
+            }
+        });
+
+        cbAcepto.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                activarRegistrar(etNombre,etPassword,etPassword2,etEmail,etCCV,etMes,etAnio,cbAcepto,btnRegistrar,rg1);
+            }
+        });
+
     }
 
     public void activarRegistrar(EditText etNombre,EditText etPassword,EditText etPassword2,EditText  etEmail, EditText  etCCV,
-                                 EditText etMes,EditText etAnio, CheckBox cbAcepto,Button registrar) {
-        if(etNombre.getText().toString().compareTo("")!=0&&etPassword.getText().toString().compareTo("")!=0
-                &&etPassword2.getText().toString().compareTo("")!=0&&etEmail.getText().toString().compareTo("")!=0
-                &&etCCV.getText().toString().compareTo("")!=0&&etMes.getText().toString().compareTo("")!=0
-                &&etAnio.getText().toString().compareTo("")!=0&&cbAcepto.isChecked()){
+                                 EditText etMes,EditText etAnio, CheckBox cbAcepto,Button registrar, RadioGroup rg1) {
+
+        if(etNombre.getText().toString().length()!=0&&etPassword.getText().toString().length()!=0
+                &&etPassword2.getText().toString().length()!=0&&etEmail.getText().toString().length()!=0
+                &&etCCV.getText().toString().length()!=0&&etMes.getText().toString().length()<=2
+                &&etAnio.getText().toString().length()<=4&&cbAcepto.isChecked()&&rg1.getCheckedRadioButtonId()!=-1){
             registrar.setEnabled(true);
         }else{
             registrar.setEnabled(false);
