@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
+    <color name="colorPrimary">#00072B</color>
+    !Background Titulo
+    <color name="colorPrimaryDark">#000D4E</color>
+    #Barra notificaciones
+    <color name="fondo">#48515E</color>
+    <color name="Blanco">#FFFFFF</color>
+    <color name="colorAccent">#FFA931</color>//Botones
 </resources>

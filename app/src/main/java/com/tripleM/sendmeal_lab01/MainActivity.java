@@ -3,6 +3,7 @@ package com.tripleM.sendmeal_lab01;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.SyncStatusObserver;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
@@ -30,7 +32,6 @@ import java.util.GregorianCalendar;
 
 public class MainActivity extends AppCompatActivity {
 
-    //
     EditText etNombre,etPassword,etPassword2, etEmail, etNumeroTarjeta, etCCV,etMes,etAnio,etCBU,etAlias;
     Button btnRegistrar;
     RadioGroup rg1;
@@ -38,6 +39,10 @@ public class MainActivity extends AppCompatActivity {
     Switch sCargaInicial;
     CheckBox cbAcepto;
     SeekBar sbMonto;
+   TextView textView;
+
+    boolean esCredito;
+    int monto=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,14 +66,14 @@ public class MainActivity extends AppCompatActivity {
         sCargaInicial = findViewById(R.id.carga_inicial);
         sbMonto = findViewById(R.id.barra);
         cbAcepto = findViewById(R.id.term_cond);
+        textView = findViewById(R.id.textView);
 
         etCCV.setEnabled(false);
         etMes.setEnabled(false);
         etAnio.setEnabled(false);
         sbMonto.setVisibility(View.GONE);
         btnRegistrar.setEnabled(false);
-
-        int monto;
+        textView.setVisibility(View.GONE);
 
         RadioGroup.OnCheckedChangeListener radioListenerRG1 = new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -115,14 +120,26 @@ public class MainActivity extends AppCompatActivity {
         sCargaInicial.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(sCargaInicial.isChecked()) sbMonto.setVisibility(View.VISIBLE);
-                else sbMonto.setVisibility(View.GONE);
+                if(sCargaInicial.isChecked()){
+                    sbMonto.setVisibility(View.VISIBLE);
+                    textView.setVisibility(View.VISIBLE);
+                }
+                else{
+                    sbMonto.setVisibility(View.GONE);
+                    textView.setVisibility(View.GONE);
+                    monto=0;
+                    sbMonto.setProgress(0);
+                    textView.setText("Carga inicial: $0");
+                }
             }
         });
 
         sbMonto.setMax(1500);
         sbMonto.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) { }
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                monto=progress;
+                textView.setText("Carga inicial: $" + progress);
+            }
             public void onStartTrackingTouch(SeekBar seekBar) {}
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
@@ -154,6 +171,10 @@ public class MainActivity extends AppCompatActivity {
                 if(rg1.getCheckedRadioButtonId()==-1) mensaje += "Seleccione el tipo de tarjeta. \n";
                 if(etNumeroTarjeta.getText().toString().length()!=16) mensaje += "El número de tarjeta está incompleto. \n";
                 if(etCCV.getText().toString().length()!=3) mensaje += "El CCV no es correcto. \n";
+                if(etCBU.getText().toString().length()>0){
+                    if(etCBU.getText().toString().length()!=22) mensaje += "El CBU es incorrecto. \n";
+                    if(etAlias.getText().toString().length()==0) mensaje += "El Alias es incorrecto. \n";
+                }
 
                 if(etMes.getText().toString().length()==0||etAnio.getText().toString().length()==0) mensaje += "La fecha no está completa. \n";
                 else {
@@ -184,19 +205,18 @@ public class MainActivity extends AppCompatActivity {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    ////
 
-                    Tarjeta tarjeta;
-                    if(rb1.isChecked()) tarjeta =new Tarjeta(etNumeroTarjeta.getText().toString(),etCCV.getText().toString(),ingresada, false);
-                    if(rb2.isChecked()) tarjeta =new Tarjeta(etNumeroTarjeta.getText().toString(),etCCV.getText().toString(),ingresada, true);
-                    else {
-                        tarjeta = new Tarjeta(etNumeroTarjeta.getText().toString(),etCCV.getText().toString(),ingresada, false);
-                    }
+                    if(rb1.isChecked()) esCredito=false;
+                    else esCredito=true;
+
+                    Tarjeta tarjeta =new Tarjeta(etNumeroTarjeta.getText().toString(),etCCV.getText().toString(),ingresada,esCredito);
+                    System.out.println(tarjeta);
 
                     CuentaBancaria cuenta = new CuentaBancaria(etCBU.getText().toString(),etAlias.getText().toString());
+                    System.out.println(cuenta);
 
-                    Usuario user = new Usuario(1, etNombre.getText().toString(), etPassword.getText().toString(), etEmail.getText().toString(),0.0,tarjeta,cuenta);
-
+                    Usuario user = new Usuario(1, etNombre.getText().toString(), etPassword.getText().toString(), etEmail.getText().toString(), Double.valueOf(monto),tarjeta,cuenta);
+                    System.out.println(user);
                 }
                 else mensaje_final=mensaje.substring(0,mensaje.length()-1);
 
