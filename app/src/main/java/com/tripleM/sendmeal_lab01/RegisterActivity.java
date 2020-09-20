@@ -1,18 +1,21 @@
 package com.tripleM.sendmeal_lab01;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
-import android.annotation.SuppressLint;
-import android.content.SyncStatusObserver;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
@@ -28,18 +31,20 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
-public class MainActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity {
 
-    EditText etNombre,etPassword,etPassword2, etEmail, etNumeroTarjeta, etCCV,etMes,etAnio,etCBU,etAlias;
-    Button btnRegistrar;
-    RadioGroup rg1;
-    RadioButton rb1,rb2;
-    Switch sCargaInicial;
-    CheckBox cbAcepto;
-    SeekBar sbMonto;
-   TextView textView;
+    private EditText etNombre,etPassword,etPassword2, etEmail, etNumeroTarjeta, etCCV,etMes,etAnio,etCBU,etAlias;
+    private Button btnRegistrar;
+    private RadioGroup rg1;
+    private RadioButton rb1,rb2;
+    private Switch sCargaInicial;
+    private CheckBox cbAcepto;
+    private SeekBar sbMonto;
+    private TextView textView;
+    private Toolbar toolbar;
+    private Usuario usuario;
+    private AppCompatActivity activity;
 
     boolean esCredito;
     int monto=0;
@@ -47,7 +52,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_register);
+
+        toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Registrar");
+        setSupportActionBar(toolbar);
 
         etNombre = findViewById(R.id.nombre);
         etPassword = findViewById(R.id.contrasenia);
@@ -215,15 +224,18 @@ public class MainActivity extends AppCompatActivity {
                     CuentaBancaria cuenta = new CuentaBancaria(etCBU.getText().toString(),etAlias.getText().toString());
                     System.out.println(cuenta);
 
-                    Usuario user = new Usuario(1, etNombre.getText().toString(), etPassword.getText().toString(), etEmail.getText().toString(), Double.valueOf(monto),tarjeta,cuenta);
-                    System.out.println(user);
+                    usuario = new Usuario(1, etNombre.getText().toString(), etPassword.getText().toString(), etEmail.getText().toString(), Double.valueOf(monto),tarjeta,cuenta);
+                    System.out.println(usuario);
+
+                    Intent i = new Intent();
+                    activity.setResult(Activity.RESULT_OK,i);
+                    activity.finish();
+
                 }
                 else mensaje_final=mensaje.substring(0,mensaje.length()-1);
 
                 Toast toast1 = Toast.makeText(getApplicationContext(), mensaje_final, Toast.LENGTH_SHORT);
                 toast1.show();
-
-
 
             }
         });
@@ -271,4 +283,25 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.back, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch(item.getItemId()){
+            case R.id.atras:
+                Intent i = new Intent(RegisterActivity.this,HomeActivity.class);
+                startActivityForResult(i,999);
+                break;
+        }
+
+        return true;
+    }
+
 }

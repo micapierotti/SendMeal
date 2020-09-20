@@ -18,5 +18,15 @@
     <string name="acepto_los_t_rminos_y_condiciones">Acepto los términos y condiciones</string>
     <string name="registrar">REGISTRAR</string>
     <string name="carga_inicial_0">Carga inicial: $0</string>
+    <string name="bienvenidos_putos">BIENVENIDOS PUTOS</string>
+    <string name="registrarme">Registrarme</string>
+    <string name="crear_item">Crear item</string>
+    <string name="lista_item">Lista item</string>
+    <string name="atr_s">Atrás</string>
+    <string name="descripci_n">Descripción</string>
+    <string name="t_tulo">Título</string>
+    <string name="calor_as">Calorías</string>
+    <string name="precio">Precio</string>
+    <string name="guardar">GUARDAR</string>
 
 </resources>
