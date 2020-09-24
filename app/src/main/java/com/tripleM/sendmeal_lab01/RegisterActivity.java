@@ -240,7 +240,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
     }
-
+//
     public boolean validarFecha(int mes, int anio) throws ParseException {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
