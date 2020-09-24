@@ -12,6 +12,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -19,6 +21,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,7 +37,7 @@ import java.util.Date;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private EditText etNombre,etPassword,etPassword2, etEmail, etNumeroTarjeta, etCCV,etMes,etAnio,etCBU,etAlias;
+    private EditText etNombre,etPassword,etPassword2, etEmail, etNumeroTarjeta, etCCV,etCBU,etAlias;
     private Button btnRegistrar;
     private RadioGroup rg1;
     private RadioButton rb1,rb2;
@@ -45,9 +48,17 @@ public class RegisterActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private Usuario usuario;
     private AppCompatActivity activity;
+    private Spinner sMes, sAnio;
 
     boolean esCredito;
     int monto=0;
+
+    private Integer[] MESES = {1,2,3,4,5,6,7,8,9,10,11,12};
+    private Integer[] ANIOS = {2020,2021,2022,2023,2024,2025,2026,2027,2028,2029,
+            2030,2031,2032,2033,2034,2035,2036,2037,2038,2039,
+            2040,2041,2042,2043,2044,2045,2046,2047,2048,2049};
+
+    private int mesSeleccionado=-1, anioSeleccionado=-1,ultimaSeleccionada=-1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +75,8 @@ public class RegisterActivity extends AppCompatActivity {
         etEmail = findViewById(R.id.email);
         etNumeroTarjeta = findViewById(R.id.nrotarjeta);
         etCCV = findViewById(R.id.ccv);
-        etMes = findViewById(R.id.fecha_mes);
-        etAnio = findViewById(R.id.fecha_anio);
+        sMes = findViewById(R.id.sMes);
+        sAnio = findViewById(R.id.sAnio);
         etCBU = findViewById(R.id.cbu);
         etAlias = findViewById(R.id.cbualias);
         btnRegistrar = findViewById(R.id.registrar);
@@ -78,11 +89,17 @@ public class RegisterActivity extends AppCompatActivity {
         textView = findViewById(R.id.textView);
 
         etCCV.setEnabled(false);
-        etMes.setEnabled(false);
-        etAnio.setEnabled(false);
+        sMes.setEnabled(false);
+        sAnio.setEnabled(false);
         sbMonto.setVisibility(View.GONE);
         btnRegistrar.setEnabled(false);
         textView.setVisibility(View.GONE);
+
+        final ArrayAdapter<Integer> adapterMeses = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,MESES);
+        final ArrayAdapter<Integer> adapterAnios = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,ANIOS);
+
+        sMes.setAdapter(adapterMeses);
+        sAnio.setAdapter(adapterAnios);
 
         RadioGroup.OnCheckedChangeListener radioListenerRG1 = new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -108,15 +125,17 @@ public class RegisterActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence cs, int i, int i1, int i2) {
                 if(cs.length()!=0){
                     etCCV.setEnabled(true);
-                    etMes.setEnabled(true);
-                    etAnio.setEnabled(true);
+                    sMes.setEnabled(true);
+                    sAnio.setEnabled(true);
                 }else{
                     etCCV.setEnabled(false);
                     etCCV.setText("");
-                    etMes.setEnabled(false);
-                    etMes.setText("");
-                    etAnio.setEnabled(false);
-                    etAnio.setText("");
+                    sMes.setEnabled(false);
+                    mesSeleccionado=-1;
+                    sMes.setSelected(false);
+                    sAnio.setEnabled(false);
+                    anioSeleccionado=-1;
+                    sAnio.setSelected(false);
                 }
             }
 
@@ -140,6 +159,38 @@ public class RegisterActivity extends AppCompatActivity {
                     sbMonto.setProgress(0);
                     textView.setText("Carga inicial: $0");
                 }
+            }
+        });
+
+        sMes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                mesSeleccionado = adapterMeses.getItem(position);
+                ultimaSeleccionada = position;
+                System.out.println(mesSeleccionado);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                mesSeleccionado=-1;
+                sMes.setSelected(false);
+                System.out.println(mesSeleccionado);
+            }
+        });
+
+        sAnio.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                anioSeleccionado = adapterAnios.getItem(position);
+                ultimaSeleccionada = position;
+                System.out.println(anioSeleccionado);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                anioSeleccionado=-1;
+                sAnio.setSelected(false);
+                System.out.println(anioSeleccionado);
             }
         });
 
@@ -185,10 +236,12 @@ public class RegisterActivity extends AppCompatActivity {
                     if(etAlias.getText().toString().length()==0) mensaje += "El Alias es incorrecto. \n";
                 }
 
-                if(etMes.getText().toString().length()==0||etAnio.getText().toString().length()==0) mensaje += "La fecha no está completa. \n";
+                if(mesSeleccionado==-1||anioSeleccionado==-1) mensaje += "La fecha no está completa. \n";
                 else {
-                    int mes = Integer.parseInt(etMes.getText().toString());
-                    int anio = Integer.parseInt(etAnio.getText().toString());
+                    //int mes = Integer.parseInt(etMes.getText().toString());
+                    //int anio = Integer.parseInt(etAnio.getText().toString());
+
+                    int mes = mesSeleccionado,anio=anioSeleccionado;
 
                     if (!(mes >= 1 && mes <= 12) || !(anio >= 2020 && anio < 2100))
                         mensaje += "La fecha ingresada no es correcta. \n";
@@ -206,8 +259,10 @@ public class RegisterActivity extends AppCompatActivity {
 
                     mensaje_final=mensaje_exitoso;
                     Date ingresada=new Date();
-                     int mes = Integer.parseInt(etMes.getText().toString());
-                    int anio = Integer.parseInt(etAnio.getText().toString());
+                    // int mes = Integer.parseInt(etMes.getText().toString());
+                    //int anio = Integer.parseInt(etAnio.getText().toString());
+                    int mes = mesSeleccionado,anio=anioSeleccionado;
+
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                     try {
                         ingresada = dateFormat.parse(anio+"-"+mes+"-1");

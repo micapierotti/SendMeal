@@ -111,23 +111,19 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/fecha_mes"
-            android:layout_width="wrap_content"
+        <Spinner
+            android:id="@+id/sMes"
+            android:layout_width="203dp"
             android:layout_height="wrap_content"
-            android:autofillHints=""
-            android:ems="10"
-            android:hint="@string/mes"
-            android:inputType="number" />
+            />
 
-        <EditText
-            android:id="@+id/fecha_anio"
-            android:layout_width="wrap_content"
+        <Spinner
+            android:id="@+id/sAnio"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:autofillHints=""
-            android:ems="10"
-            android:hint="@string/a_o"
-            android:inputType="number" />
+            android:layout_weight="1"
+            />
+
     </LinearLayout>
 
     <EditText
