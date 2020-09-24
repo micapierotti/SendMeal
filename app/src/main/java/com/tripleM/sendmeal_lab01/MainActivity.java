@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
+//
         btnRegistrar.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
