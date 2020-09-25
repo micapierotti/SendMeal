@@ -52,8 +52,10 @@ public class ListaItemActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
             case R.id.atras:
-                Intent i = new Intent(ListaItemActivity.this, HomeActivity.class);
-                startActivityForResult(i,992);
+                finish();
+                break;
+            case R.id.BackButton:
+                finish();
                 break;
         }
         return true;

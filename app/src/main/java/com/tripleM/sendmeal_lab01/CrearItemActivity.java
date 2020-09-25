@@ -36,7 +36,7 @@ public class CrearItemActivity extends AppCompatActivity {
         guardar = findViewById(R.id.guardarPlato);
 
         toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("CrearPlatos");
+        toolbar.setTitle("Crear Plato");
         setSupportActionBar(toolbar);
 
         guardar.setOnClickListener(new View.OnClickListener() {
@@ -57,14 +57,16 @@ public class CrearItemActivity extends AppCompatActivity {
                     plato = new Plato(titulo.getText().toString(),descripcion.getText().toString(),Double.parseDouble(precio.getText().toString()),Integer.parseInt(calorias.getText().toString()));
                     System.out.println(plato);
 
-                    Intent i = new Intent();
-                    activity.setResult(Activity.RESULT_OK,i);
-                    activity.finish();
+                    Intent iresult = new Intent();
+                    iresult.putExtra("plato","Plato creado exitosamente.");
+                    setResult(Activity.RESULT_OK,iresult);
+                    finish();
 
-                }else mensaje_final=mensaje.substring(0,mensaje.length()-1);
-
-                Toast toast1 = Toast.makeText(getApplicationContext(), mensaje_final, Toast.LENGTH_SHORT);
-                toast1.show();
+                }else {
+                    mensaje_final=mensaje.substring(0,mensaje.length()-1);
+                    Toast toast1 = Toast.makeText(getApplicationContext(), mensaje_final, Toast.LENGTH_SHORT);
+                    toast1.show();
+                }
             }
         });
 
@@ -82,10 +84,11 @@ public class CrearItemActivity extends AppCompatActivity {
 
         switch(item.getItemId()){
             case R.id.atras:
-               Intent i = new Intent(CrearItemActivity.this, HomeActivity.class);
-               startActivityForResult(i,987);
+                finish();
                 break;
-
+            case R.id.BackButton:
+                finish();
+                break;
         }
         return true;
     }

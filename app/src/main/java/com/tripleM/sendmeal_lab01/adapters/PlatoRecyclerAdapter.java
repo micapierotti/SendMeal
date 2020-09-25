@@ -46,8 +46,6 @@ public class PlatoRecyclerAdapter extends RecyclerView.Adapter<PlatoRecyclerAdap
                 @Override
                 public void onClick(View v) {
                     Integer pos = (Integer)v.getTag();
-                    Intent i = new Intent();
-                    activity.setResult(Activity.RESULT_OK,i);
                     activity.finish();
                 }
             });
@@ -90,8 +88,8 @@ public class PlatoRecyclerAdapter extends RecyclerView.Adapter<PlatoRecyclerAdap
         }
         */
             platoHolder.titulo.setText(plato.getTitulo());
-            platoHolder.precio.setText(" "+plato.getPrecio().toString());
-            platoHolder.imgPlato.setImageResource(R.drawable.img);
+            platoHolder.precio.setText(" $"+plato.getPrecio().toString());
+            platoHolder.imgPlato.setImageResource(R.drawable.milanesasconfritas);
         }
 
         @Override

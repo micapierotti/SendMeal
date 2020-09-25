@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -282,16 +283,18 @@ public class RegisterActivity extends AppCompatActivity {
                     usuario = new Usuario(1, etNombre.getText().toString(), etPassword.getText().toString(), etEmail.getText().toString(), Double.valueOf(monto),tarjeta,cuenta);
                     System.out.println(usuario);
 
-                    Intent i = new Intent();
-                    activity.setResult(Activity.RESULT_OK,i);
-                    activity.finish();
+                    Intent iresult = new Intent();
+                    iresult.putExtra("user", "Usuario creado exitosamente.");
+                    setResult(RESULT_OK,iresult);
+                    finish();
 
                 }
-                else mensaje_final=mensaje.substring(0,mensaje.length()-1);
+                else {
+                    mensaje_final=mensaje.substring(0,mensaje.length()-1);
 
-                Toast toast1 = Toast.makeText(getApplicationContext(), mensaje_final, Toast.LENGTH_SHORT);
-                toast1.show();
-
+                    Toast toast1 = Toast.makeText(getApplicationContext(), mensaje_final, Toast.LENGTH_SHORT);
+                    toast1.show();
+                }
             }
         });
     }
@@ -351,8 +354,12 @@ public class RegisterActivity extends AppCompatActivity {
 
         switch(item.getItemId()){
             case R.id.atras:
-                Intent i = new Intent(RegisterActivity.this,HomeActivity.class);
-                startActivityForResult(i,999);
+                //Intent i = new Intent(RegisterActivity.this,HomeActivity.class);
+                //startActivityForResult(i,999);
+                finish();
+                break;
+            case R.id.BackButton:
+                finish();
                 break;
         }
 

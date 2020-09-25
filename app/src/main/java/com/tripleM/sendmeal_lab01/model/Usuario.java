@@ -19,6 +19,10 @@ public class Usuario {
         this.cuentaBancaria = cuentaBancaria;
     }
 
+    public Usuario(){
+
+    }
+
     public int getId() {
         return id;
     }

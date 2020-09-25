@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#00072B</color>
-    !Background Titulo
-    <color name="colorPrimaryDark">#000D4E</color>
-    #Barra notificaciones
+    <color name="colorPrimary">#3282b8</color>
+    <!--Background Titulo-->
+    <color name="colorPrimaryLight">#0f4c75</color>
+    <!--notificaciones-->
     <color name="fondo">#48515E</color>
     <color name="Blanco">#FFFFFF</color>
-    <color name="colorAccent">#FFA931</color>//Botones
+    <color name="colorAccent">#8BC34A</color> <!--Botones-->
+    <color name="cardViewFondo">#1b262c</color>
 </resources>

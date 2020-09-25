@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/atras"
         android:title="@string/atr_s" />
+    <item
+        android:id="@+id/BackButton"
+        android:checkable="false"
+        android:icon="@drawable/arrow_back"
+        android:title="@string/backbutton"
+        app:showAsAction="always" />
 
+    <!--#8BC34A-->
 </menu>
