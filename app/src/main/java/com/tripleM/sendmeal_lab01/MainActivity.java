@@ -2,52 +2,15 @@ package com.tripleM.sendmeal_lab01;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
-import android.content.SyncStatusObserver;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.SeekBar;
-import android.widget.Switch;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.tripleM.sendmeal_lab01.model.CuentaBancaria;
-import com.tripleM.sendmeal_lab01.model.Tarjeta;
-import com.tripleM.sendmeal_lab01.model.Usuario;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 public class MainActivity extends AppCompatActivity {
-
-    EditText etNombre,etPassword,etPassword2, etEmail, etNumeroTarjeta, etCCV,etMes,etAnio,etCBU,etAlias;
-    Button btnRegistrar;
-    RadioGroup rg1;
-    RadioButton rb1,rb2;
-    Switch sCargaInicial;
-    CheckBox cbAcepto;
-    SeekBar sbMonto;
-   TextView textView;
-
-    boolean esCredito;
-    int monto=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         etNombre = findViewById(R.id.nombre);
         etPassword = findViewById(R.id.contrasenia);
@@ -269,6 +232,7 @@ public class MainActivity extends AppCompatActivity {
         }else{
             registrar.setEnabled(false);
         }
+
 
     }
 }
