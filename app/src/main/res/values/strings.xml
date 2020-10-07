@@ -29,5 +29,14 @@
     <string name="precio">Precio</string>
     <string name="guardar">GUARDAR</string>
     <string name="backbutton" />
+    <string name="nuevo_pedido">Nuevo pedido</string>
+    <string name="ingrese_los_datos_de_su_nuevo_pedido">¡Ingrese los datos de su nuevo pedido!</string>
+    <string name="ingrese_su_email">Ingrese su email</string>
+    <string name="ingrese_la_direcci_n_de_env_o">Ingrese la dirección de envío</string>
+    <string name="agregar_plato">Agregar plato</string>
+    <string name="tipo_de_entrega">Tipo de entrega</string>
+    <string name="env_o">Envío</string>
+    <string name="take_away">Take Away</string>
+    <string name="confirmar">Confirmar</string>
 
 </resources>

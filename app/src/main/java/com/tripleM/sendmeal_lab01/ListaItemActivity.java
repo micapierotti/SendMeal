@@ -16,15 +16,26 @@ public class ListaItemActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private PlatoDAO platoDAO;
-
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
+    private Integer i;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_item);
+
+        int callingActivity = getIntent().getIntExtra("calling-activity", 0);
+
+        switch (callingActivity) {
+            case 3:
+                i=1;
+                break;
+            case 5:
+                i=2;
+                break;
+        }
 
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Lista de Platos");
@@ -37,20 +48,24 @@ public class ListaItemActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        mAdapter = new PlatoRecyclerAdapter(platoDAO.list(),this);
+        mAdapter = new PlatoRecyclerAdapter(platoDAO.list(),this,i);
         recyclerView.setAdapter(mAdapter);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.back, menu);
+        menuInflater.inflate(R.menu.menulistaplatos, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
+            case R.id.menuPedido:
+                Intent i4 = new Intent(ListaItemActivity.this, PedidoActivity.class);
+                startActivity(i4);
+                break;
             case R.id.atras:
                 finish();
                 break;

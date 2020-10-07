@@ -50,6 +50,7 @@ public class HomeActivity extends AppCompatActivity {
 
             case R.id.menuListaItem:
                 Intent i3 = new Intent(HomeActivity.this, ListaItemActivity.class);
+                i3.putExtra("calling-activity", 3);
                 startActivityForResult(i3,3);
                 break;
 
