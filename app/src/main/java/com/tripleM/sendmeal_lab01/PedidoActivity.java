@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tripleM.sendmeal_lab01.adapters.PedidoRecyclerAdapter;
@@ -42,6 +43,8 @@ public class PedidoActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter mAdapter;
     private GuardarPedido guardarPedido;
+    private Double subtototal;
+    private TextView subtotalPrecio, textoSubtotal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +62,15 @@ public class PedidoActivity extends AppCompatActivity {
         rbTakeAway=findViewById(R.id.takeAway);
         btAgregarPlato=findViewById(R.id.btAgregarPlato);
         btConfirmar=findViewById(R.id.btConfirmar);
+        subtotalPrecio=findViewById(R.id.etSubtotalPrecio);
+        textoSubtotal=findViewById(R.id.etSubtotal);
+
         listaPlatos = new ArrayList<>();
+
+        if(listaPlatos.isEmpty()) {
+            subtotalPrecio.setVisibility(View.GONE);
+            textoSubtotal.setVisibility(View.GONE);
+        }
 
         platosPedidos=findViewById(R.id.recyclerPedido);
         platosPedidos.setHasFixedSize(true);
@@ -68,6 +79,7 @@ public class PedidoActivity extends AppCompatActivity {
 
         mAdapter = new PedidoRecyclerAdapter(listaPlatos,this);
         platosPedidos.setAdapter(mAdapter);
+        subtototal=0.0;
 
         RadioGroup.OnCheckedChangeListener radioListenerRG1 = new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -139,18 +151,26 @@ public class PedidoActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+                Double st = 0.0;
         if(requestCode==5){
             if(resultCode==RESULT_OK){
                 String nombrePlato = data.getExtras().getString("nombrePlato");
                 String precioPlato = data.getExtras().getString("precioPlato");
+
+                st=Double.parseDouble(precioPlato.substring(2));
+                subtototal=subtototal+st;
+                subtotalPrecio.setText("$"+subtototal.toString());
+
                 listaPlatos.add(new Pair<String, String>(nombrePlato,precioPlato));
+
+                if(!listaPlatos.isEmpty()) {
+                    subtotalPrecio.setVisibility(View.VISIBLE);
+                    textoSubtotal.setVisibility(View.VISIBLE);
+                }
 
                 mAdapter = new PedidoRecyclerAdapter(listaPlatos,this);
                 platosPedidos.setAdapter(mAdapter);
 
-                //Toast toast1 = Toast.makeText(getApplicationContext(),nombrePlato+" "+precioPlato, Toast.LENGTH_SHORT);
-                //toast1.show();
             }
         }
     }

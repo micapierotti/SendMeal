@@ -38,5 +38,6 @@
     <string name="env_o">Envío</string>
     <string name="take_away">Take Away</string>
     <string name="confirmar">Confirmar</string>
+    <string name="subtotal">Subtotal</string>
 
 </resources>

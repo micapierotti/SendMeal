@@ -20,7 +20,7 @@ import com.tripleM.sendmeal_lab01.model.Plato;
 
 import java.util.List;
 
-public class PedidoRecyclerAdapter extends RecyclerView.Adapter<PedidoRecyclerAdapter.PlatoViewHolder>{
+public class PedidoRecyclerAdapter extends RecyclerView.Adapter<PedidoRecyclerAdapter.PedidoViewHolder>{
 
     private List<Pair<String,String>> mDataset;
     private AppCompatActivity activity;
@@ -30,12 +30,12 @@ public class PedidoRecyclerAdapter extends RecyclerView.Adapter<PedidoRecyclerAd
         activity = act;
     }
 
-    public class PlatoViewHolder extends RecyclerView.ViewHolder {
+    public class PedidoViewHolder extends RecyclerView.ViewHolder {
 
         TextView nombre;
         TextView precio;
 
-        public PlatoViewHolder(@NonNull View v) {
+        public PedidoViewHolder(@NonNull View v) {
             super(v);
             nombre = v.findViewById(R.id.nombrePlato);
             precio = v.findViewById(R.id.precioPlato);
@@ -44,14 +44,14 @@ public class PedidoRecyclerAdapter extends RecyclerView.Adapter<PedidoRecyclerAd
 
     @NonNull
     @Override
-    public PedidoRecyclerAdapter.PlatoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public PedidoRecyclerAdapter.PedidoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.fila_pedido, parent, false);
-        PlatoViewHolder  vh = new PlatoViewHolder(v);
+        PedidoViewHolder  vh = new PedidoViewHolder(v);
         return vh;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PedidoRecyclerAdapter.PlatoViewHolder platoHolder, int position) {
+    public void onBindViewHolder(@NonNull PedidoRecyclerAdapter.PedidoViewHolder platoHolder, int position) {
 
         platoHolder.nombre.setTag(position);
         platoHolder.precio.setTag(position);
