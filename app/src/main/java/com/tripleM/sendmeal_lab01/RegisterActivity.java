@@ -194,7 +194,7 @@ public class RegisterActivity extends AppCompatActivity {
                 System.out.println(anioSeleccionado);
             }
         });
-
+////
         sbMonto.setMax(1500);
         sbMonto.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {

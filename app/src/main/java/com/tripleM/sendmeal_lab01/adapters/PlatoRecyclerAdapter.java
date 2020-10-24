@@ -2,6 +2,7 @@ package com.tripleM.sendmeal_lab01.adapters;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +21,12 @@ public class PlatoRecyclerAdapter extends RecyclerView.Adapter<PlatoRecyclerAdap
 
     private List<Plato> mDataset;
     private AppCompatActivity activity;
+    private Integer actAnterior;
 
-    public PlatoRecyclerAdapter(List<Plato> myDataset,AppCompatActivity act) {
+    public PlatoRecyclerAdapter(List<Plato> myDataset,AppCompatActivity act,Integer i) {
         mDataset = myDataset;
         activity = act;
+        actAnterior=i;
     }
 
     public class PlatoViewHolder extends RecyclerView.ViewHolder {
@@ -41,15 +44,21 @@ public class PlatoRecyclerAdapter extends RecyclerView.Adapter<PlatoRecyclerAdap
             precio = v.findViewById(R.id.precioPlato);
             imgPlato = v.findViewById(R.id.imagenPlato);
             btnSeleccionar = v.findViewById(R.id.seleccionar);
+            btnSeleccionar.setVisibility(View.VISIBLE);
+            if(actAnterior==1)btnSeleccionar.setVisibility(View.GONE);
+            else if(actAnterior==2)btnSeleccionar.setVisibility(View.VISIBLE);
 
             btnSeleccionar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Integer pos = (Integer)v.getTag();
+                    Intent iresult = new Intent();
+                    iresult.putExtra("nombrePlato", titulo.getText());
+                    iresult.putExtra("precioPlato", precio.getText());
+                    activity.setResult(Activity.RESULT_OK,iresult);
                     activity.finish();
                 }
             });
-
         }
     }
 
