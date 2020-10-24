@@ -91,7 +91,7 @@
             android:layout_height="wrap_content"
             android:text="@string/subtotal"
             android:textSize="18sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/etSubtotalPrecio"
