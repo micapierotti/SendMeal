@@ -5,7 +5,7 @@ import com.tripleM.sendmeal_lab01.model.Plato;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlatoDAO {
+public class PlatoDAODatos {
     private static final List<Plato> platos = new ArrayList<>();
 
     private void iniciar(){

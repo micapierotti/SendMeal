@@ -5,21 +5,34 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.tripleM.sendmeal_lab01.adapters.PlatoRecyclerAdapter;
-import com.tripleM.sendmeal_lab01.dao.PlatoDAO;
 
-public class ListaItemActivity extends AppCompatActivity {
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.tripleM.sendmeal_lab01.adapters.PlatoRecyclerAdapter;
+import com.tripleM.sendmeal_lab01.dao.PlatoDAODatos;
+import com.tripleM.sendmeal_lab01.database.AppRepository;
+import com.tripleM.sendmeal_lab01.retrofit.PlatoService;
+
+import java.util.List;
+
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+public class ListaItemActivity extends AppCompatActivity implements AppRepository.OnResultCallback  {
 
     private Toolbar toolbar;
-    private PlatoDAO platoDAO;
+    private PlatoDAODatos platoDAO;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private Integer i;
+    private AppRepository repository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +54,7 @@ public class ListaItemActivity extends AppCompatActivity {
         toolbar.setTitle("Lista de Platos");
         setSupportActionBar(toolbar);
 
-        platoDAO = new PlatoDAO();
+        platoDAO = new PlatoDAODatos();
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerPlato);
         recyclerView.setHasFixedSize(true);
@@ -50,6 +63,21 @@ public class ListaItemActivity extends AppCompatActivity {
 
         mAdapter = new PlatoRecyclerAdapter(platoDAO.list(),this,i);
         recyclerView.setAdapter(mAdapter);
+
+
+        Gson gson = new GsonBuilder().setLenient().create();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("{urlApiRest}/")
+                // En la siguiente linea, le especificamos a Retrofit que tiene que usar Gson para deserializar nuestros objetos
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        PlatoService platoService = retrofit.create(PlatoService.class);
+
+        repository = new AppRepository(this.getApplication(), this);
+        repository.buscarTodos();
+        repository.buscar("1");
+
     }
 
     @Override
@@ -76,4 +104,16 @@ public class ListaItemActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public void onResult(List result) {
+        // Vamos a obtener una Lista de items como resultado cuando finalize
+        Toast.makeText(ListaItemActivity.this, "Exito BUSCAR TODOS!", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onResultId(Object result) {
+        // Vamos a obtener un item como resultado cuando finalize
+        Toast.makeText(ListaItemActivity.this, "Exito BUSCAR POR ID!", Toast.LENGTH_SHORT).show();
+
+    }
 }
