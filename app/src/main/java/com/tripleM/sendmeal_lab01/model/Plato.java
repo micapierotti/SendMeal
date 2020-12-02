@@ -14,6 +14,7 @@ public class Plato {
     private Double precio;
     private Integer calorias;
 
+    @Ignore
     public Plato(String titulo, String descripcion, Double precio, Integer calorias) {
         this.titulo = titulo;
         this.descripcion = descripcion;

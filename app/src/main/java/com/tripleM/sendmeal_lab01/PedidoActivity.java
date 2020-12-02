@@ -23,6 +23,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.tripleM.sendmeal_lab01.adapters.PedidoRecyclerAdapter;
 import com.tripleM.sendmeal_lab01.broadcast.MyNotificationPublisher;
 
@@ -37,14 +38,14 @@ public class PedidoActivity extends AppCompatActivity {
     private EditText etEmail, etDireccion;
     private RadioGroup rgEntrega;
     private RadioButton rbEnvio, rbTakeAway;
-    private Button btAgregarPlato, btConfirmar;
+    private Button btAgregarPlato, btConfirmar,ubicacionPedido;
     private ArrayList<Pair<String,String>> listaPlatos;
     private RecyclerView platosPedidos;
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter mAdapter;
     private GuardarPedido guardarPedido;
     private Double subtototal;
-    private TextView subtotalPrecio, textoSubtotal;
+    private TextView subtotalPrecio, textoSubtotal,ubicacion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +57,7 @@ public class PedidoActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         etEmail=findViewById(R.id.emailUsuario);
-        etDireccion=findViewById(R.id.direccionUsuario);
+        ubicacionPedido=findViewById(R.id.ubicacionPedido);
         rgEntrega=findViewById(R.id.entrega);
         rbEnvio=findViewById(R.id.envio);
         rbTakeAway=findViewById(R.id.takeAway);
@@ -64,7 +65,7 @@ public class PedidoActivity extends AppCompatActivity {
         btConfirmar=findViewById(R.id.btConfirmar);
         subtotalPrecio=findViewById(R.id.etSubtotalPrecio);
         textoSubtotal=findViewById(R.id.etSubtotal);
-
+        ubicacion=findViewById(R.id.direccion);
         listaPlatos = new ArrayList<>();
 
         if(listaPlatos.isEmpty()) {
@@ -105,6 +106,16 @@ public class PedidoActivity extends AppCompatActivity {
         });
 
         guardarPedido=new GuardarPedido();
+
+        ubicacionPedido.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(PedidoActivity.this, MapsActivity.class);
+                i.putExtra("calling-activity", 999);
+                startActivityForResult(i,999);
+            }
+        });
+
 
         btConfirmar.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -173,6 +184,14 @@ public class PedidoActivity extends AppCompatActivity {
 
             }
         }
+        if(requestCode==999){
+            if(resultCode==RESULT_OK){
+                double latitud = data.getExtras().getDouble("latitud");
+                double longitud = data.getExtras().getDouble("longitud");
+
+                ubicacion.setText(latitud+" "+longitud);
+            }
+        }
     }
 
     class GuardarPedido extends AsyncTask<Double,Integer,String> {
@@ -224,6 +243,4 @@ public class PedidoActivity extends AppCompatActivity {
 
         }
     }
-
-
 }

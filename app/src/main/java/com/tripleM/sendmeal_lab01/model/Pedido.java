@@ -2,6 +2,9 @@ package com.tripleM.sendmeal_lab01.model;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.List;
 
 @Entity
@@ -12,6 +15,7 @@ public class Pedido {
     private List<Plato> listaPlatos;
     private Double total;
     private Usuario usuario;
+    private LatLng ubicacion;
 
     public Pedido() { }
 
@@ -52,5 +56,13 @@ public class Pedido {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public LatLng getUbicacion() {
+        return ubicacion;
+    }
+
+    public void setUbicacion(LatLng ubicacion) {
+        this.ubicacion = ubicacion;
     }
 }

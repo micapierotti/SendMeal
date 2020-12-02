@@ -33,14 +33,18 @@
         android:inputType="textEmailAddress"
         android:autofillHints="" />
 
-    <EditText
-        android:id="@+id/direccionUsuario"
+    <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/ingrese_la_direcci_n_de_env_o"
-        android:inputType="textPersonName"
-        android:autofillHints="" />
+        android:id="@+id/ubicacionPedido"
+        android:text="Seleccione su direccion"
+        ></Button>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/direccion"
+        ></TextView>
 
     <TextView
         android:id="@+id/rgEntrega"
