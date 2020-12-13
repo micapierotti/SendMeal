@@ -18,20 +18,38 @@
     <TextView
         android:id="@+id/textoInical"
         android:layout_width="match_parent"
-        android:layout_height="59dp"
+        android:layout_height="42dp"
         android:text="@string/ingrese_los_datos_de_su_nuevo_pedido"
-        android:textSize="20sp"
         android:textAlignment="center"
+        android:textSize="20sp" />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18dp"
+        android:id="@+id/emailPedido"
+        android:text="Email de Usuario"
+        android:textStyle="bold"
         />
 
     <EditText
         android:id="@+id/emailUsuario"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:autofillHints=""
         android:ems="10"
         android:hint="@string/ingrese_su_email"
-        android:inputType="textEmailAddress"
-        android:autofillHints="" />
+        android:inputType="textEmailAddress" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18dp"
+        android:id="@+id/ubicacion"
+        android:text="Ubicación"
+        android:textStyle="bold"
+        />
 
     <Button
         android:layout_width="match_parent"
@@ -40,17 +58,20 @@
         android:text="Seleccione su direccion"
         ></Button>
 
+
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/direccion"
-        ></TextView>
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:text="Ubicación no especificada."
+        android:textSize="18dp"></TextView>
 
     <TextView
         android:id="@+id/rgEntrega"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/tipo_de_entrega"
+        android:textStyle="bold"
         android:textSize="18sp" />
 
     <RadioGroup

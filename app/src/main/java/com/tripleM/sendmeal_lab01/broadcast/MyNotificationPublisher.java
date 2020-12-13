@@ -7,7 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context ;
 import android.content.Intent ;
 
-import static com.tripleM.sendmeal_lab01.PedidoActivity.NOTIFICATION_CHANNEL_ID;
+import static com.tripleM.sendmeal_lab01.room.AppRepository.NOTIFICATION_CHANNEL_ID;
 
 public class MyNotificationPublisher extends BroadcastReceiver {
 

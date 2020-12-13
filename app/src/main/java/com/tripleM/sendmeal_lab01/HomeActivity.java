@@ -10,8 +10,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.tripleM.sendmeal_lab01.model.Usuario;
-
 public class HomeActivity extends AppCompatActivity {
 
     Toolbar toolbar;
@@ -24,7 +22,6 @@ public class HomeActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Menú");
         setSupportActionBar(toolbar);
-
     }
 
     @Override
@@ -66,7 +63,7 @@ public class HomeActivity extends AppCompatActivity {
                 if(resultCode==RESULT_OK){
                     String msj = data.getExtras().getString("user");
                     Toast toast1 = Toast.makeText(getApplicationContext(), msj, Toast.LENGTH_SHORT);
-                    toast1.show();
+                    //toast1.show();
                 }
             }
 
@@ -74,7 +71,7 @@ public class HomeActivity extends AppCompatActivity {
             if(resultCode==RESULT_OK){
                 String msj = data.getExtras().getString("plato");
                 Toast toast1 = Toast.makeText(getApplicationContext(), msj, Toast.LENGTH_SHORT);
-                toast1.show();
+                //toast1.show();
             }
         }
     }

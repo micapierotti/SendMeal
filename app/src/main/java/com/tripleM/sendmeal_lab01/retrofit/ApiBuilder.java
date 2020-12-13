@@ -7,19 +7,18 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiBuilder {
-    private PlatoService platoService;
-    private PedidoService pedidoService;
+    private PlatoDAORest platoService;
+    private PedidoDAORest pedidoService;
     private static ApiBuilder _INSTANCIA;
 
     private ApiBuilder(){ }
 
-    public PlatoService getPlatoRest() {
+    public PlatoDAORest getPlatoRest() {
         if(platoService==null) this.iniciarRetrofit();
         return platoService;
     }
 
-
-    public PedidoService getPedidoRest() {
+    public PedidoDAORest getPedidoRest() {
         if(pedidoService==null) this.iniciarRetrofit();
         return pedidoService;
     }
@@ -37,11 +36,11 @@ public class ApiBuilder {
                 .setLenient().create();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:5000/")
+                .baseUrl("http://10.0.2.2/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
-        platoService =retrofit.create(PlatoService.class);
-        pedidoService =retrofit.create(PedidoService.class);
+        platoService =retrofit.create(PlatoDAORest.class);
+        pedidoService =retrofit.create(PedidoDAORest.class);
     }
 
 }

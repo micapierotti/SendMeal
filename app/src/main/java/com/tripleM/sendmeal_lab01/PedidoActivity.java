@@ -3,17 +3,13 @@ package com.tripleM.sendmeal_lab01;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.NotificationCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.SystemClock;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
@@ -23,19 +19,21 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.tripleM.sendmeal_lab01.adapters.PedidoRecyclerAdapter;
-import com.tripleM.sendmeal_lab01.broadcast.MyNotificationPublisher;
+import com.tripleM.sendmeal_lab01.model.Pedido;
+import com.tripleM.sendmeal_lab01.model.Plato;
+import com.tripleM.sendmeal_lab01.retrofit.PedidoRepositoryRest;
+import com.tripleM.sendmeal_lab01.room.AccionesDAO;
+import com.tripleM.sendmeal_lab01.room.AppRepository;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.List;
 
-public class PedidoActivity extends AppCompatActivity {
-
-    public static final String NOTIFICATION_CHANNEL_ID = "10001";
-    private final static String default_notification_channel_id = "default";
+public class PedidoActivity extends AppCompatActivity implements AppRepository.OnResultCallback {
 
     private Toolbar toolbar;
-    private EditText etEmail, etDireccion;
+    private EditText etEmail;
     private RadioGroup rgEntrega;
     private RadioButton rbEnvio, rbTakeAway;
     private Button btAgregarPlato, btConfirmar,ubicacionPedido;
@@ -43,9 +41,10 @@ public class PedidoActivity extends AppCompatActivity {
     private RecyclerView platosPedidos;
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter mAdapter;
-    private GuardarPedido guardarPedido;
     private Double subtototal;
     private TextView subtotalPrecio, textoSubtotal,ubicacion;
+    private AppRepository pedidoRoom;
+    private PedidoRepositoryRest pedidoRest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +81,17 @@ public class PedidoActivity extends AppCompatActivity {
         platosPedidos.setAdapter(mAdapter);
         subtototal=0.0;
 
+        //Persistencia con Room
+        pedidoRoom = new AppRepository(getApplication(),this);
+
+        //Persistencia con Retrofit
+        pedidoRest = new PedidoRepositoryRest();
+
+        //Buscar todos los pedidos con Room (solo para verificar)
+        //pedidoRoom.buscarTodosPedidos();
+
+        //Buscar todos los pedidos con Retrofit (solo para verificar)
+        pedidoRest.listarPedido(mHandler);
         RadioGroup.OnCheckedChangeListener radioListenerRG1 = new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
@@ -105,7 +115,6 @@ public class PedidoActivity extends AppCompatActivity {
             }
         });
 
-        guardarPedido=new GuardarPedido();
 
         ubicacionPedido.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,24 +125,29 @@ public class PedidoActivity extends AppCompatActivity {
             }
         });
 
-
         btConfirmar.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 String mensaje = "";
-                String mensaje_final = new String();
-                String mensaje_exitoso = "Pedido realizado exitosamente.";
+                String mensaje_final;
 
-                if(etDireccion.getText().toString().length()==0) mensaje += "La dirección está vacío. \n";
+                if(ubicacion.getText().toString().compareTo("Ubicación no especificada.")==0) mensaje += "No seleccionó la ubicación. \n";
                 if (etEmail.getText().toString().length() == 0) mensaje += "El e-mail está vacío. \n";
                 else if (!condicionEmail(etEmail.getText().toString())) mensaje += "El e-mail debe contener un @ seguido de al menos 3 letras. \n";
                 if (rgEntrega.getCheckedRadioButtonId() == -1) mensaje += "Seleccione el tipo de envío. \n";
+                if (listaPlatos.isEmpty()) mensaje += "No agregó ningún plato al pedido. \n";
 
                 if (mensaje.length() == 0) {
 
-                    guardarPedido.execute();
+                    Pedido pedido=new Pedido(null,subtototal,listaPlatos,rbEnvio.isSelected(),etEmail.getText().toString(),ubicacion.getText().toString());
 
-                    //finish();
+                    //Guardar pedido con Room
+                    pedidoRoom.insertarPedido(pedido,PedidoActivity.this);
+
+                    //Guardar pedido con Retrofit
+                    pedidoRest.crearPedido(pedido,mHandler);
+
+                    finish();
 
                 } else {
                     mensaje_final = mensaje.substring(0, mensaje.length() - 1);
@@ -172,7 +186,7 @@ public class PedidoActivity extends AppCompatActivity {
                 subtototal=subtototal+st;
                 subtotalPrecio.setText("$"+subtototal.toString());
 
-                listaPlatos.add(new Pair<String, String>(nombrePlato,precioPlato));
+                listaPlatos.add(new Pair<>(nombrePlato, precioPlato));
 
                 if(!listaPlatos.isEmpty()) {
                     subtotalPrecio.setVisibility(View.VISIBLE);
@@ -189,58 +203,57 @@ public class PedidoActivity extends AppCompatActivity {
                 double latitud = data.getExtras().getDouble("latitud");
                 double longitud = data.getExtras().getDouble("longitud");
 
-                ubicacion.setText(latitud+" "+longitud);
+                ubicacion.setText("Lat: "+latitud+"     "+"Long:"+longitud);
             }
         }
     }
 
-    class GuardarPedido extends AsyncTask<Double,Integer,String> {
+    @Override
+    public void onResult(List result) {
+        System.out.println("PEDIDOS " +result);
+    }
 
-        @Override
-        protected void onPreExecute() {
+    @Override
+    public void onResultId(Object result) {
 
+    }
+
+    private final MyHandler mHandler = new MyHandler(this);
+
+    private static class MyHandler extends Handler {
+        private final WeakReference<PedidoActivity> mActivity;
+
+        public MyHandler(PedidoActivity activity) {
+            mActivity = new WeakReference<>(activity);
         }
 
         @Override
-        protected String doInBackground(Double... doubles) {
-
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        public void handleMessage(Message msg) {
+            PedidoActivity activity = mActivity.get();
+            if (activity != null) {
+                Bundle data = msg.getData();
+                AccionesDAO evento = AccionesDAO.valueOf(data.getString("accion"));
+                switch (evento){
+                    case CREAR_PEDIDO:
+                        Plato plato = data.getParcelable("pedido");
+                        System.out.println("PEDIDO: "+plato);
+                        Toast.makeText(activity,"Pedido creado",Toast.LENGTH_LONG).show();
+                        activity.finish();
+                        break;
+                    case LISTAR_PEDIDOS:
+                        List<Plato> platos = data.getParcelable("pedidos");
+                        System.out.println("PEDIDOS: "+platos);
+                        Toast.makeText(activity,"Pedidos listados",Toast.LENGTH_LONG).show();
+                        activity.finish();
+                        break;
+                    case ERROR:
+                        String error = data.getParcelable("error");
+                        System.out.println("ERROR: "+error);
+                        Toast.makeText(activity,"Error de API REST",Toast.LENGTH_LONG).show();
+                        //activity.finish();
+                        break;
+                }
             }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(PedidoActivity.this, default_notification_channel_id);
-            builder.setContentTitle("SendMeal");
-            builder.setContentText("¡El pedido ya está listo!");
-            builder.setSmallIcon(R.drawable.ic_launcher_foreground);
-            builder.setAutoCancel(true);
-            builder.setChannelId(NOTIFICATION_CHANNEL_ID);
-
-            Intent notificationIntent = new Intent(PedidoActivity.this, MyNotificationPublisher.class);
-            notificationIntent.putExtra(MyNotificationPublisher.NOTIFICATION_ID, 1);
-            notificationIntent.putExtra(MyNotificationPublisher.NOTIFICATION, builder.build());
-
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(PedidoActivity.this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-            alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, 0, pendingIntent);
-
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-
-        }
-
-        @Override
-        protected void onCancelled(String s) {
-
         }
     }
 }

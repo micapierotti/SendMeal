@@ -10,10 +10,19 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -22,6 +31,9 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,21 +44,64 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleMap mMap;
     private LatLng ubicacionPedido;
     private Button confirmar;
+    private TextView ubicacion;
+    private Location ubicacionActual;
+    private FusedLocationProviderClient fusedLocationProviderClient;
+    private static final int REQUEST_CODE = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         confirmar=findViewById(R.id.confirmar);
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        ubicacion=findViewById(R.id.ubicacion_actual);
+
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        fetchLastLocation();
+
     }
 
+    private void fetchLastLocation(){
+
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,
+                    new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
+            return;
+        }
+        Task<Location> task = fusedLocationProviderClient.getLastLocation();
+        task.addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if(location!=null){
+                    ubicacionActual = location;
+                    Toast.makeText(getApplicationContext(),ubicacionActual.getLatitude()+" "+ ubicacionActual.getLongitude(),Toast.LENGTH_SHORT).show();
+                    SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                            .findFragmentById(R.id.map);
+                    mapFragment.getMapAsync(MapsActivity.this);
+
+                }
+            }
+        });
+    }
+
+    @SuppressLint("ServiceCast")
     @Override
     public void onMapReady(GoogleMap googleMap) {
         //Instancia de mapa
         mMap = googleMap;
+
+        LatLng latLng = new LatLng(ubicacionActual.getLatitude(),ubicacionActual.getLongitude());
+        MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("Ubicación actual");
+
+        mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,15));
+        mMap.addMarker(markerOptions);
+
+        ubicacionPedido=latLng;
+        ubicacion.setText(ubicacionPedido.toString());
 
         //Pedir permiso para saber ubicacion actual
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -58,15 +113,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     9999);
             return;
         }
-
         mMap.setMyLocationEnabled(true);
-
-        //Seteo el tipo de mapa que quiero
-        //mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-        //mMap.setMapType(GoogleMap.MAP_TYPE_NONE);
-        //mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        //mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-        //mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
 
         //Habilito que se pueda ver el trafico
         mMap.setTrafficEnabled(true);
@@ -76,16 +123,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         //Instancia de marcadores
         final Map<Integer, MarkerOptions> marcadores = new HashMap<>();
-
-        //Marcador en Crai
-        //mostrarCrai();
-
-        //Marcador en Sydney
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-
-        //Posicion inicial de la camara en Sydney
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
         //Configuraciones de la rotaciones y gestos
         mMap.getUiSettings().setCompassEnabled(true);
@@ -99,10 +136,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 MarkerOptions m = new MarkerOptions()
                         .position(latLng)
                         .title("Destino del pedido")
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE));
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
                 mMap.clear();
                 mMap.addMarker(m);
                 ubicacionPedido=latLng;
+                ubicacion.setText(ubicacionPedido.toString());
             }
         });
 
@@ -110,95 +148,33 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View view) {
                 Intent iresult = new Intent();
+                System.out.println(ubicacionPedido.latitude+"   "+ubicacionPedido.longitude);
+
                 iresult.putExtra("latitud", ubicacionPedido.latitude);
-                iresult.putExtra("latitud", ubicacionPedido.longitude);
+                iresult.putExtra("longitud", ubicacionPedido.longitude);
                 setResult(RESULT_OK,iresult);
                 finish();
             }
         });
-
-/*
-        //Listener de un marcador
-        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-                marker.setVisible(false);
-                return false;
-            }
-        });
-
-        //GENERAR POLIGONO
-
-        //Creo la lista de puntos a usar para el poligono
-        List<LatLng> lista = this.generarPuntos(1);
-        LatLng ultimoPunto = null;
-
-        //Uno los puntos, pinto de rojo el borde y de azul el interior
-        PolygonOptions linea = new PolygonOptions();
-        for(LatLng punto: lista ){
-            linea.add(punto).fillColor(Color.RED).strokeColor(Color.BLUE);
-            ultimoPunto = punto;
-        }
-        googleMap.addPolygon(linea);
-
-        //Animacion de la posición inicial a un punto en especifico con un zoom
-        CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(ultimoPunto)
-                .zoom(15)
-                .build();
-
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition),3000,null);
-  */  }
-/*
-    private void mostrarCrai(){
-        LatLng crai= new LatLng(-31.620816,-60.747582);
-        mMap.addMarker(new MarkerOptions().position(crai)
-                //.icon(BitmapDescriptorFactory.fromResource(R.drawable.club))
-                .title("CRAI")
-                .snippet("Club de rugby ateneo inmaculada"));
-
-        CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(crai)
-                .zoom(17)
-                .bearing(90)
-                .tilt(30)
-                .build();
-
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition),3000,null);
     }
 
-    private List<LatLng> generarPuntos(Integer n){
-
-        //Agego dos puntos iniciales
-        List<LatLng> lista = new ArrayList<>();
-        double norte = -31.614339;
-        double oeste = -60.702693;
-        double sur = -31.644426;
-        double este = -60.687270;
-        LatLng punto1 = new LatLng(norte,oeste);
-        LatLng punto2 = new LatLng(sur,este);
-        lista.add(punto1);
-        lista.add(punto2);
-
-        //Agrego n puntos mas cercanos a punto 1 de forma aleatoria
-        Random r = new Random();
-        for(int i =0; i<n;i++){
-            double  l1 = r.nextDouble()/1000.0;
-            double  l2 = r.nextDouble()/1000.0;
-            lista.add(new LatLng(norte-l1,oeste-l2));
-        }
-
-        return lista;
-    }
-*/
     //Habilitar ir a la posicion actual
     @SuppressLint("MissingPermission")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if(requestCode==9999 && grantResults[0]==PackageManager.PERMISSION_GRANTED){
-            mMap.setMyLocationEnabled(true);
+        switch (requestCode){
+            case REQUEST_CODE:
+                if (grantResults.length>0 && grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                    fetchLastLocation();
+                }
+                break;
+            case 9999:
+                if (grantResults.length>0 && grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                    mMap.setMyLocationEnabled(true);
+                }
+                break;
         }
     }
 }
