@@ -47,7 +47,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private static final int REQUEST_CODE = 101;
     private  MarkerOptions markerLocal;
 
-
+//kashdajsh
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
