@@ -65,7 +65,6 @@ dependencies {
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.9'
     // Utilities for Maps SDK for Android (requires Google Play Services)
     implementation 'com.google.maps.android:android-maps-utils:2.0.3'
-// Alternately - Utilities for Maps SDK v3 BETA for Android (does not require Google Play Services)
-// implementation 'com.google.maps.android:android-maps-utils-v3:2.0.3'}
-
+    // Alternately - Utilities for Maps SDK v3 BETA for Android (does not require Google Play Services)
+    //implementation 'com.google.maps.android:android-maps-utils-v3:2.0.3'
 }
