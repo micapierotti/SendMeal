@@ -2,22 +2,36 @@ package com.tripleM.sendmeal_lab01;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-public class HomeActivity extends AppCompatActivity {
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
+public class HomeActivity extends AppCompatActivity {
+    private FirebaseAuth mAuth;
     Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activty_home);
+
+        // Inicializar Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
+        // Iniciar Session como usuario anónimo
+        signInAnonymously();
 
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Menú");
@@ -74,5 +88,24 @@ public class HomeActivity extends AppCompatActivity {
                 //toast1.show();
             }
         }
+    }
+
+    private void signInAnonymously() {
+        mAuth.signInAnonymously()
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Exit
+                            Log.d("SIGNIN", "signInAnonymously:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                        } else {
+                            // Error
+                            Log.w("SIGNIN", "signInAnonymously:failure", task.getException());
+                            Toast.makeText(HomeActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 }

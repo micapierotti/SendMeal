@@ -25,6 +25,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -32,7 +33,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.maps.android.SphericalUtil;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -45,9 +48,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Location ubicacionActual;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private static final int REQUEST_CODE = 101;
+    Polyline polyline = null;
+    List<LatLng> latLngList = new ArrayList<>();
     private  MarkerOptions markerLocal;
 
-//kashdajsh
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,47 +132,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.getUiSettings().setRotateGesturesEnabled(true);
         mMap.getUiSettings().setTiltGesturesEnabled(true);
 
-        //Marcador de clic largo
-        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
-            @Override
-            public void onMapLongClick(LatLng latLng) {
-                MarkerOptions m = new MarkerOptions()
-                        .position(latLng)
-                        .title("Destino del pedido")
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-                mMap.clear();
-                //mMap.addMarker(markerLocal);
-                mMap.addMarker(m);
-                ubicacionPedido=latLng;
-                ubicacion.setText(ubicacionPedido.toString());
-
-                //polyline
-                /*
-                Polyline polyline1 = mMap.addPolyline(new PolylineOptions()
-                        .clickable(true)
-                        .add(ubicacionLocal, latLng));
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacionLocal, 2));
-
-                 */
-            }
-        });
-
-        confirmar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent iresult = new Intent();
-                System.out.println(ubicacionPedido.latitude+"   "+ubicacionPedido.longitude);
-
-                iresult.putExtra("latitud", ubicacionPedido.latitude);
-                iresult.putExtra("longitud", ubicacionPedido.longitude);
-                setResult(RESULT_OK,iresult);
-                finish();
-            }
-        });
-
         //ubicacion del local
-        /*
-         Random r = new Random();
+
+        Random r = new Random();
 
         // Una direccion aleatoria de 0 a 359 grados
         int direccionRandomEnGrados = r.nextInt(360);
@@ -192,10 +158,53 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .title("Ubicación del local")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
         mMap.addMarker(markerLocal);
-        */
+
+        //Marcador de clic largo
+        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+                MarkerOptions m = new MarkerOptions()
+                        .position(latLng)
+                        .title("Destino del pedido")
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                mMap.clear();
+                latLngList.clear();
+
+                mMap.addMarker(markerLocal);
+                mMap.addMarker(m);
+
+                ubicacionPedido=latLng;
+                ubicacion.setText(ubicacionPedido.toString());
+
+                latLngList.add(markerLocal.getPosition());
+                latLngList.add(latLng);
+
+                dibujarPolyline();
+            }
+        });
+
+        confirmar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent iresult = new Intent();
+                System.out.println(ubicacionPedido.latitude+"   "+ubicacionPedido.longitude);
+
+                iresult.putExtra("latitud", ubicacionPedido.latitude);
+                iresult.putExtra("longitud", ubicacionPedido.longitude);
+                setResult(RESULT_OK,iresult);
+                finish();
+            }
+        });
 
     }
-
+    public void dibujarPolyline(){
+        if (polyline != null){
+            polyline.remove();
+        }
+        PolylineOptions polylineOptions = new PolylineOptions()
+                .addAll(latLngList).clickable(true);
+        polyline = mMap.addPolyline(polylineOptions);
+    }
     //Habilitar ir a la posicion actual
     @SuppressLint("MissingPermission")
     @Override
