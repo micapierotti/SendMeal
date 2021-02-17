@@ -39,5 +39,8 @@
     <string name="take_away">Take Away</string>
     <string name="confirmar">Confirmar</string>
     <string name="subtotal">Subtotal</string>
+    <string name="foto_del_plato_tomar">Tomar una foto del plato</string>
+    <string name="seleccionar_foto_de_mi_galeria">Seleccionar una foto de mi Galeria</string>
+    <string name="imagen_del_plato">Foto del plato</string>
 
 </resources>

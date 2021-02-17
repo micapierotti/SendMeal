@@ -51,6 +51,7 @@ public class PlatoRepositoryRest{
 
     public void listarPlato(final Handler h){
         Call<List<Plato>> callPlatos = platoRest.getPlatoList();
+
         callPlatos.enqueue(new Callback<List<Plato>>() {
             @Override
             public void onResponse(Call<List<Plato>> call, Response<List<Plato>> response) {
@@ -60,6 +61,9 @@ public class PlatoRepositoryRest{
                 final Bundle datos = new Bundle();
                 datos.putParcelableArrayList("platos",(ArrayList<Plato>) response.body());
                 datos.putString("accion", AccionesDAO.LISTAR_PLATOS.toString());
+                System.out.println("Hasta aca");
+
+
                 msg.setData(datos);
                 h.sendMessage(msg);
             }
@@ -72,6 +76,9 @@ public class PlatoRepositoryRest{
                 datos.putString("accion", AccionesDAO.ERROR.toString());
                 datos.putString("error", t.getMessage());
                 msg.setData(datos);
+                System.out.println("Hasta aca 2");
+                System.out.println("Hasta aca 3");
+
                 h.sendMessage(msg);
             }
         });

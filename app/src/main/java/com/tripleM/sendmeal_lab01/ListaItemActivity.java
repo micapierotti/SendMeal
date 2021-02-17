@@ -109,7 +109,7 @@ public class ListaItemActivity extends AppCompatActivity implements AppRepositor
     public void onResult(List result) {
         listaPlatos.addAll(result);
         mAdapter.notifyDataSetChanged();
-//        System.out.println(result);
+          System.out.println(result);
 //        Toast.makeText(ListaItemActivity.this, "Exito BUSCAR TODOS!", Toast.LENGTH_SHORT).show();
     }
 
