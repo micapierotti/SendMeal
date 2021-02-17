@@ -9,6 +9,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.maps.android.SphericalUtil;
@@ -48,8 +50,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Location ubicacionActual;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private static final int REQUEST_CODE = 101;
-    Polyline polyline = null;
-    List<LatLng> latLngList = new ArrayList<>();
+    private Polyline polyline = null;
+    private List<LatLng> latLngList = new ArrayList<>();
     private  MarkerOptions markerLocal;
 
     @Override
@@ -74,20 +76,32 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
             return;
         }
-        Task<Location> task = fusedLocationProviderClient.getLastLocation();
-        task.addOnSuccessListener(new OnSuccessListener<Location>() {
+        fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
             @Override
-            public void onSuccess(Location location) {
-                if(location!=null){
-                    ubicacionActual = location;
-                    Toast.makeText(getApplicationContext(),ubicacionActual.getLatitude()+" "+ ubicacionActual.getLongitude(),Toast.LENGTH_SHORT).show();
-                    SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                            .findFragmentById(R.id.map);
-                    mapFragment.getMapAsync(MapsActivity.this);
-
-                }
+            public void onComplete(@NonNull Task<Location> task) {
+                System.out.print(task.getResult().toString());
+                ubicacionActual=task.getResult();
+                Toast.makeText(getApplicationContext(),ubicacionActual.getLatitude()+" "+ ubicacionActual.getLongitude(),Toast.LENGTH_SHORT).show();
+                SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                        .findFragmentById(R.id.map);
+                mapFragment.getMapAsync(MapsActivity.this);
             }
         });
+
+        //Task<Location> task = fusedLocationProviderClient.getLastLocation();
+        //task.addOnSuccessListener(new OnSuccessListener<Location>() {
+          //  @Override
+            //public void onSuccess(Location location) {
+                //if(location!=null){
+              //      ubicacionActual = location;
+                //    Toast.makeText(getApplicationContext(),ubicacionActual.getLatitude()+" "+ ubicacionActual.getLongitude(),Toast.LENGTH_SHORT).show();
+                  //  SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                 //     .findFragmentById(R.id.map);
+                //    mapFragment.getMapAsync(MapsActivity.this);
+
+                //}
+       //     }
+        //});
     }
 
     @SuppressLint("ServiceCast")
@@ -180,6 +194,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 latLngList.add(latLng);
 
                 dibujarPolyline();
+
+
+
             }
         });
 
@@ -198,12 +215,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
     public void dibujarPolyline(){
-        if (polyline != null){
-            polyline.remove();
-        }
+        //if (polyline != null){
+           // polyline.remove();
+        //}
         PolylineOptions polylineOptions = new PolylineOptions()
                 .addAll(latLngList).clickable(true);
-        polyline = mMap.addPolyline(polylineOptions);
+        polyline=mMap.addPolyline(polylineOptions);
+        polyline.setColor(Color.BLUE);
     }
     //Habilitar ir a la posicion actual
     @SuppressLint("MissingPermission")
