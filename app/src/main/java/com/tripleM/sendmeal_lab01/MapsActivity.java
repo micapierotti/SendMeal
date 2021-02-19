@@ -160,8 +160,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         LocationManager locMa = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Location location = locMa.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        ubicacionLocal = new LatLng(location.getLatitude(), location.getLongitude());
-
+        if(location==null){
+            ubicacionLocal = new LatLng(-31.635914, -60.700979);
+            System.out.print("ENTRO 1");
+        }else {
+            System.out.print("ENTRO 2");
+            ubicacionLocal = new LatLng(location.getLatitude(), location.getLongitude());
+        }
         LatLng nuevaPosicion = SphericalUtil.computeOffset(
                 ubicacionLocal,
                 distanciaRandomEnMetros,
