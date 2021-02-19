@@ -2,6 +2,9 @@ package com.tripleM.sendmeal_lab01.adapters;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +16,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.tripleM.sendmeal_lab01.Firebase;
 import com.tripleM.sendmeal_lab01.ListaItemActivity;
 import com.tripleM.sendmeal_lab01.R;
 import com.tripleM.sendmeal_lab01.model.Plato;
@@ -23,6 +31,7 @@ public class PlatoRecyclerAdapter extends RecyclerView.Adapter<PlatoRecyclerAdap
     private List<Plato> mDataset;
     private AppCompatActivity activity;
     private Integer actAnterior;
+    private FirebaseStorage storage;
 
     public PlatoRecyclerAdapter(List<Plato> myDataset,AppCompatActivity act,Integer i) {
         mDataset = myDataset;
@@ -93,6 +102,8 @@ public class PlatoRecyclerAdapter extends RecyclerView.Adapter<PlatoRecyclerAdap
         return vh;
     }
 
+
+
     @Override
     public void onBindViewHolder(@NonNull PlatoRecyclerAdapter.PlatoViewHolder platoHolder, int position) {
 
@@ -106,7 +117,29 @@ public class PlatoRecyclerAdapter extends RecyclerView.Adapter<PlatoRecyclerAdap
 
             platoHolder.titulo.setText(plato.getTitulo());
             platoHolder.precio.setText(" $"+plato.getPrecio().toString());
-            platoHolder.imgPlato.setImageResource(R.drawable.milanesasconfritas);
+
+            StorageReference gsReference = storage.getReferenceFromUrl("/images/"+plato.getTitulo()+".jpg");
+
+            final long THREE_MEGABYTE = 3 * 1024 * 1024;
+             gsReference.getBytes(THREE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                // Exito
+                Bitmap bm = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                DisplayMetrics dm = new DisplayMetrics();
+                //getWindowManager().getDefaultDisplay().getMetrics(dm);
+
+                platoHolder.imgPlato.setImageBitmap(bm);
+                platoHolder.imgPlato.setMinimumHeight(dm.heightPixels);
+                platoHolder.imgPlato.setMinimumWidth(dm.widthPixels);
+                platoHolder.imgPlato.setImageBitmap(bm);
+            }
+             }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                platoHolder.imgPlato.setImageResource(R.drawable.milanesasconfritas);
+            }
+             });
         }
 
         @Override

@@ -14,21 +14,36 @@ public class Plato implements Parcelable {
     private String descripcion;
     private Double precio;
     private Integer calorias;
+    private String url="";
+
+
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+
 
     @Ignore
-    public Plato(String titulo, String descripcion, Double precio, Integer calorias) {
+    public Plato(String titulo, String descripcion, Double precio, Integer calorias, String url) {
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.precio = precio;
         this.calorias = calorias;
+        this.url=url;
     }
 
-    public Plato(Long idPlato, String titulo, String descripcion, Double precio, Integer calorias) {
+    public Plato(Long idPlato, String titulo, String descripcion, Double precio, Integer calorias, String url) {
         this.idPlato =idPlato;
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.precio = precio;
         this.calorias = calorias;
+        this.url=url;
     }
 
     protected Plato(Parcel in) {
@@ -49,6 +64,8 @@ public class Plato implements Parcelable {
         } else {
             calorias = in.readInt();
         }
+        url=in.readString();
+
     }
 
     public String getTitulo() {
@@ -99,6 +116,7 @@ public class Plato implements Parcelable {
                 ", descripcion='" + descripcion + '\'' +
                 ", precio=" + precio +
                 ", calorias=" + calorias +
+                ", url='" + url + '\'' +
                 '}';
     }
 

@@ -7,6 +7,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context ;
 import android.content.Intent ;
 
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+
+import com.tripleM.sendmeal_lab01.R;
+
 import static com.tripleM.sendmeal_lab01.room.AppRepository.NOTIFICATION_CHANNEL_ID;
 
 public class MyNotificationPublisher extends BroadcastReceiver {
@@ -15,6 +20,7 @@ public class MyNotificationPublisher extends BroadcastReceiver {
     public static String NOTIFICATION = "notification" ;
 
     public void onReceive (Context context , Intent intent) {
+
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE ) ;
         Notification notification = intent.getParcelableExtra( NOTIFICATION ) ;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES. O ) {
@@ -25,7 +31,15 @@ public class MyNotificationPublisher extends BroadcastReceiver {
         }
         int id = intent.getIntExtra( NOTIFICATION_ID , 0 ) ;
         assert notificationManager != null;
-        notificationManager.notify(id , notification) ;
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID);
+        builder.setSmallIcon(R.drawable.ic_launcher_foreground);
+        builder.setContentTitle("Send Meal");
+        builder.setContentText("El pedido ha sido confirmado");
+        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        notificationManager.notify(id, builder.build());
+        System.out.print("\n ENVIO LA NOTIFICACION \n");
+        //notificationManager.notify(id , notification) ;
     }
 
 }

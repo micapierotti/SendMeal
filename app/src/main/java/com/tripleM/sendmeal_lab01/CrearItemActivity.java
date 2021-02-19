@@ -20,11 +20,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.tripleM.sendmeal_lab01.model.Plato;
 import com.tripleM.sendmeal_lab01.retrofit.PlatoRepositoryRest;
 import com.tripleM.sendmeal_lab01.room.AccionesDAO;
@@ -49,7 +54,8 @@ public class CrearItemActivity extends AppCompatActivity implements AppRepositor
     private FirebaseStorage storage;
     static final int CAMARA_REQUEST = 1;
     static final int GALERIA_REQUEST = 2;
-
+    private String urlPlato;
+    private byte[] data2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,9 +94,10 @@ public class CrearItemActivity extends AppCompatActivity implements AppRepositor
                 if(descripcion.getText().toString().length()==0) mensaje += "La descripción está vacía. \n";
                 if(precio.getText().toString().length()==0) mensaje += "El precio está vacío. \n";
                 if(calorias.getText().toString().length()==0) mensaje += "Las calorias están vacías. \n";
-
+                if(fotoPlato==null) mensaje += "La foto del plato no fue proporcionada. \n";
                 if(mensaje.length()==0){
-                    plato = new Plato(titulo.getText().toString(),descripcion.getText().toString(),Double.parseDouble(precio.getText().toString()),Integer.parseInt(calorias.getText().toString()));
+                    guardarFotoPlato(data2);
+                    plato = new Plato(titulo.getText().toString(),descripcion.getText().toString(),Double.parseDouble(precio.getText().toString()),Integer.parseInt(calorias.getText().toString()),urlPlato);
 
                     //Guardar con Room
                     platoRoom.insertar(plato);
@@ -131,6 +138,43 @@ public class CrearItemActivity extends AppCompatActivity implements AppRepositor
         Intent galeriaIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         startActivityForResult(galeriaIntent, GALERIA_REQUEST);
     }
+    private void guardarFotoPlato(byte[] data) {
+        // Creamos una referencia a nuestro Storage
+        StorageReference storageRef = storage.getReference();
+        // Creamos una referencia a 'images/plato_id.jpg'
+        StorageReference platosImagesRef = storageRef.child("/images/"+titulo.getText().toString()+".jpg");
+
+
+        // Cual quiera de los tres métodos tienen la misma implementación, se debe utilizar el que corresponda
+        UploadTask uploadTask = platosImagesRef.putBytes(data);
+        // UploadTask uploadTask = platosImagesRef.putFile(file);
+        // UploadTask uploadTask = platosImagesRef.putStream(stream);
+
+        // Registramos un listener para saber el resultado de la operación
+        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) {
+                    throw task.getException();
+                }
+
+                // Continuamos con la tarea para obtener la URL
+                return platosImagesRef.getDownloadUrl();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    // URL de descarga del archivo
+                    Uri downloadUri = task.getResult();
+                    urlPlato=downloadUri.toString();
+                } else {
+                    urlPlato="";
+                }
+            }
+        });
+
+    }
     private void guardarFoto() {
         // Creamos una referencia a nuestro Storage
         StorageReference storageRef = storage.getReference();
@@ -147,7 +191,7 @@ public class CrearItemActivity extends AppCompatActivity implements AppRepositor
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 fotoPlato.setImageBitmap(imageBitmap);
-                byte[] data2 = baos.toByteArray(); // Imagen en arreglo de bytes
+                data2 = baos.toByteArray(); // Imagen en arreglo de bytes
                 //guardarFotoPlato(data2);
             }
             if(requestCode== GALERIA_REQUEST){
@@ -158,7 +202,7 @@ public class CrearItemActivity extends AppCompatActivity implements AppRepositor
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     selectedImage.compress(Bitmap.CompressFormat.JPEG,100,baos);
                     fotoPlato.setImageBitmap(selectedImage);
-                    byte[] data2 = baos.toByteArray(); // Imagen en arreglo de bytes
+                    data2 = baos.toByteArray(); // Imagen en arreglo de bytes
                     //guardarFotoPlato(data2);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();

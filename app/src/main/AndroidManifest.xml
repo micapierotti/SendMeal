@@ -21,15 +21,15 @@
         <activity android:name=".ListaItemActivity"></activity>
         <activity android:name=".MapsActivity"
             tools:ignore="Instantiatable"></activity>
+
         <service
-            android:name=".Firebase"
-            android:exported="false"
-            tools:ignore="Instantiatable">
+            android:name=".MyFirebaseMessagingService"
+            android:directBootAware="true"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />

@@ -200,7 +200,7 @@ public class ListaItemActivity extends AppCompatActivity implements AppRepositor
                         activity.finish();
                         break;
                     case ERROR:
-                        String error = data.getParcelable("error");
+                            String error = data.getParcelable("error");
                         System.out.println("ERROR: "+error);
                         Toast.makeText(activity,"Error de API REST",Toast.LENGTH_LONG).show();
                         //activity.finish();

@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tripleM.sendmeal_lab01.adapters.PedidoRecyclerAdapter;
+import com.tripleM.sendmeal_lab01.broadcast.MyNotificationPublisher;
 import com.tripleM.sendmeal_lab01.model.Pedido;
 import com.tripleM.sendmeal_lab01.model.Plato;
 import com.tripleM.sendmeal_lab01.retrofit.PedidoRepositoryRest;
@@ -45,7 +47,7 @@ public class PedidoActivity extends AppCompatActivity implements AppRepository.O
     private TextView subtotalPrecio, textoSubtotal,ubicacion;
     private AppRepository pedidoRoom;
     private PedidoRepositoryRest pedidoRest;
-
+    private Context contexto = this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -147,6 +149,9 @@ public class PedidoActivity extends AppCompatActivity implements AppRepository.O
                     //Guardar pedido con Retrofit
                     pedidoRest.crearPedido(pedido,mHandler);
 
+                    Intent notificationIntent = new Intent(contexto, MyNotificationPublisher.class);
+                    contexto.sendBroadcast(notificationIntent);
+                    System.out.print("\n Volvio de LA NOTIFICACION \n");
                     finish();
 
                 } else {
