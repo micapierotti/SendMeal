@@ -49,7 +49,7 @@ public class HomeActivity extends AppCompatActivity {
                         // Imprimirlo en un toast y en logs
                         Log.d("Token ", token);
                         System.out.print("Token = "+token);
-                        Toast.makeText(HomeActivity.this, token, Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(HomeActivity.this, token, Toast.LENGTH_SHORT).show();
                     }
                 });
 

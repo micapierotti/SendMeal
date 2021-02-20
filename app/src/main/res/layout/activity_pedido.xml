@@ -99,6 +99,14 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/tvListaPlatos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Platos en el pedido:"
+            android:textStyle="bold"
+            android:textSize="18sp" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerPedido"
             android:layout_width="match_parent"

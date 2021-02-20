@@ -44,7 +44,7 @@ public class PedidoActivity extends AppCompatActivity implements AppRepository.O
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter mAdapter;
     private Double subtototal;
-    private TextView subtotalPrecio, textoSubtotal,ubicacion;
+    private TextView subtotalPrecio, textoSubtotal,ubicacion,listaPlatosPedido;
     private AppRepository pedidoRoom;
     private PedidoRepositoryRest pedidoRest;
     private Context contexto = this;
@@ -68,6 +68,7 @@ public class PedidoActivity extends AppCompatActivity implements AppRepository.O
         textoSubtotal=findViewById(R.id.etSubtotal);
         ubicacion=findViewById(R.id.direccion);
         listaPlatos = new ArrayList<>();
+        listaPlatosPedido = findViewById(R.id.tvListaPlatos);
 
         if(listaPlatos.isEmpty()) {
             subtotalPrecio.setVisibility(View.GONE);
@@ -149,9 +150,9 @@ public class PedidoActivity extends AppCompatActivity implements AppRepository.O
                     //Guardar pedido con Retrofit
                     pedidoRest.crearPedido(pedido,mHandler);
 
-                    Intent notificationIntent = new Intent(contexto, MyNotificationPublisher.class);
-                    contexto.sendBroadcast(notificationIntent);
-                    System.out.print("\n Volvio de LA NOTIFICACION \n");
+                    //Intent notificationIntent = new Intent(contexto, MyNotificationPublisher.class);
+                    //contexto.sendBroadcast(notificationIntent);
+
                     finish();
 
                 } else {

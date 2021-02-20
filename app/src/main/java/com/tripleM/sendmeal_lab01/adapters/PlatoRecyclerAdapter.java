@@ -31,7 +31,8 @@ public class PlatoRecyclerAdapter extends RecyclerView.Adapter<PlatoRecyclerAdap
     private List<Plato> mDataset;
     private AppCompatActivity activity;
     private Integer actAnterior;
-    private FirebaseStorage storage;
+    private FirebaseStorage storage=FirebaseStorage.getInstance();
+
 
     public PlatoRecyclerAdapter(List<Plato> myDataset,AppCompatActivity act,Integer i) {
         mDataset = myDataset;
@@ -118,10 +119,10 @@ public class PlatoRecyclerAdapter extends RecyclerView.Adapter<PlatoRecyclerAdap
             platoHolder.titulo.setText(plato.getTitulo());
             platoHolder.precio.setText(" $"+plato.getPrecio().toString());
 
-            StorageReference gsReference = storage.getReferenceFromUrl("/images/"+plato.getTitulo()+".jpg");
+            StorageReference gsReference = storage.getReferenceFromUrl("gs://sendmeal-4aa68.appspot.com/images/"+plato.getTitulo().toLowerCase()+".jpg");
 
-            final long THREE_MEGABYTE = 3 * 1024 * 1024;
-             gsReference.getBytes(THREE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            final long TEN_MEGABYTE = 10 * 1024 * 1024;
+             gsReference.getBytes(TEN_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
                 // Exito

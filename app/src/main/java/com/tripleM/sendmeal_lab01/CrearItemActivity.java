@@ -51,7 +51,7 @@ public class CrearItemActivity extends AppCompatActivity implements AppRepositor
     private Plato plato;
     private AppRepository platoRoom;
     private PlatoRepositoryRest platoRest;
-    private FirebaseStorage storage;
+    private FirebaseStorage storage=FirebaseStorage.getInstance();
     static final int CAMARA_REQUEST = 1;
     static final int GALERIA_REQUEST = 2;
     private String urlPlato;
@@ -138,43 +138,7 @@ public class CrearItemActivity extends AppCompatActivity implements AppRepositor
         Intent galeriaIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         startActivityForResult(galeriaIntent, GALERIA_REQUEST);
     }
-    private void guardarFotoPlato(byte[] data) {
-        // Creamos una referencia a nuestro Storage
-        StorageReference storageRef = storage.getReference();
-        // Creamos una referencia a 'images/plato_id.jpg'
-        StorageReference platosImagesRef = storageRef.child("/images/"+titulo.getText().toString()+".jpg");
 
-
-        // Cual quiera de los tres métodos tienen la misma implementación, se debe utilizar el que corresponda
-        UploadTask uploadTask = platosImagesRef.putBytes(data);
-        // UploadTask uploadTask = platosImagesRef.putFile(file);
-        // UploadTask uploadTask = platosImagesRef.putStream(stream);
-
-        // Registramos un listener para saber el resultado de la operación
-        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-            @Override
-            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                if (!task.isSuccessful()) {
-                    throw task.getException();
-                }
-
-                // Continuamos con la tarea para obtener la URL
-                return platosImagesRef.getDownloadUrl();
-            }
-        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-            @Override
-            public void onComplete(@NonNull Task<Uri> task) {
-                if (task.isSuccessful()) {
-                    // URL de descarga del archivo
-                    Uri downloadUri = task.getResult();
-                    urlPlato=downloadUri.toString();
-                } else {
-                    urlPlato="";
-                }
-            }
-        });
-
-    }
     private void guardarFoto() {
         // Creamos una referencia a nuestro Storage
         StorageReference storageRef = storage.getReference();
@@ -239,7 +203,43 @@ public class CrearItemActivity extends AppCompatActivity implements AppRepositor
     @Override
     public void onResultId(Object result) {
     }
+    private void guardarFotoPlato(byte[] data) {
+        // Creamos una referencia a nuestro Storage
+        StorageReference storageRef = storage.getReference();
+        // Creamos una referencia a 'images/plato_id.jpg'
+        StorageReference platosImagesRef = storageRef.child("images/"+titulo.getText().toString().toLowerCase()+".jpg");
 
+
+        // Cual quiera de los tres métodos tienen la misma implementación, se debe utilizar el que corresponda
+        UploadTask uploadTask = platosImagesRef.putBytes(data);
+        // UploadTask uploadTask = platosImagesRef.putFile(file);
+        // UploadTask uploadTask = platosImagesRef.putStream(stream);
+
+        // Registramos un listener para saber el resultado de la operación
+        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) {
+                    throw task.getException();
+                }
+
+                // Continuamos con la tarea para obtener la URL
+                return platosImagesRef.getDownloadUrl();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    // URL de descarga del archivo
+                    Uri downloadUri = task.getResult();
+                    urlPlato=downloadUri.toString();
+                } else {
+                    urlPlato="";
+                }
+            }
+        });
+
+    }
     private final MyHandler mHandler = new MyHandler(this);
 
     private static class MyHandler extends Handler {
