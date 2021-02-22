@@ -70,13 +70,23 @@
                     android:textColor="@color/Blanco"/>
 
                 <Button
-                    android:id="@+id/seleccionar"
+                    android:id="@+id/borrar_plato"
                     style="@style/Widget.AppCompat.Button.Borderless.Colored"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Seleccionar"
+                    android:layout_weight="0.00005"
+                    android:text="Borrar"
                     android:textColor="#FCFFFFFF" />
+
+                <Button
+                    android:id="@+id/selec_actual"
+                    style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.000000005"
+                    android:text="Actualizar"
+                    android:textColor="#FCFFFFFF" />
+
             </LinearLayout>
 
         </LinearLayout>

@@ -10,7 +10,7 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
-public interface PedidoService {
+public interface PedidoDAORest {
     @GET("pedido/{id}")
     Call<Pedido> getPedido(@Path("id") String id);
 

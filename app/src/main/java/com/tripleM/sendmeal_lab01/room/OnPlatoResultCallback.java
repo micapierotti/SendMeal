@@ -1,4 +1,4 @@
-package com.tripleM.sendmeal_lab01.database;
+package com.tripleM.sendmeal_lab01.room;
 
 import com.tripleM.sendmeal_lab01.model.Plato;
 
@@ -7,4 +7,5 @@ import java.util.List;
 interface OnPlatoResultCallback {
     void onResult(List<Plato> plato);
     void onResultId(Plato plato);
+    void onResultActualizar(boolean b);
 }

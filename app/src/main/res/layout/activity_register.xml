@@ -88,6 +88,7 @@
             android:layout_height="wrap_content"
             android:autofillHints=""
             android:ems="10"
+            android:maxLength="16"
             android:hint="@string/n_mero_de_tarjeta"
             android:inputType="number" />
 
@@ -97,6 +98,7 @@
             android:layout_height="wrap_content"
             android:autofillHints=""
             android:ems="10"
+            android:maxLength="3"
             android:hint="@string/ccv"
             android:inputType="number" />
     </LinearLayout>
@@ -133,6 +135,7 @@
         android:layout_height="wrap_content"
         android:autofillHints=""
         android:ems="10"
+        android:maxLength="22"
         android:hint="@string/cbu"
         android:inputType="number" />
 

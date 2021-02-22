@@ -18,35 +18,60 @@
     <TextView
         android:id="@+id/textoInical"
         android:layout_width="match_parent"
-        android:layout_height="59dp"
+        android:layout_height="42dp"
         android:text="@string/ingrese_los_datos_de_su_nuevo_pedido"
-        android:textSize="20sp"
         android:textAlignment="center"
+        android:textSize="20sp" />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18dp"
+        android:id="@+id/emailPedido"
+        android:text="Email de Usuario"
+        android:textStyle="bold"
         />
 
     <EditText
         android:id="@+id/emailUsuario"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:autofillHints=""
         android:ems="10"
         android:hint="@string/ingrese_su_email"
-        android:inputType="textEmailAddress"
-        android:autofillHints="" />
+        android:inputType="textEmailAddress" />
 
-    <EditText
-        android:id="@+id/direccionUsuario"
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/ingrese_la_direcci_n_de_env_o"
-        android:inputType="textPersonName"
-        android:autofillHints="" />
+        android:textSize="18dp"
+        android:id="@+id/ubicacion"
+        android:text="Ubicación"
+        android:textStyle="bold"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ubicacionPedido"
+        android:text="Seleccione su direccion"
+        ></Button>
+
+
+    <TextView
+        android:id="@+id/direccion"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:text="Ubicación no especificada."
+        android:textSize="18dp"></TextView>
 
     <TextView
         android:id="@+id/rgEntrega"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/tipo_de_entrega"
+        android:textStyle="bold"
         android:textSize="18sp" />
 
     <RadioGroup
@@ -73,6 +98,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvListaPlatos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Platos en el pedido:"
+            android:textStyle="bold"
+            android:textSize="18sp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerPedido"

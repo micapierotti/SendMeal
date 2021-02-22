@@ -1,11 +1,12 @@
-package com.tripleM.sendmeal_lab01.database;
+package com.tripleM.sendmeal_lab01.room;
 
 import androidx.room.*;
 import com.tripleM.sendmeal_lab01.model.*;
+
 import java.util.List;
 
 @Dao
-public interface PedidoDao {
+public interface PedidoDAORoom {
     @Insert
     void insertar(Pedido pedido);
 
@@ -17,7 +18,8 @@ public interface PedidoDao {
 /*
     @Query("SELECT * FROM pedido WHERE id = :id LIMIT 1")
     Pedido buscar(String id);
-
+*/
     @Query("SELECT * FROM pedido")
-    List<Pedido> buscarTodos();*/
+    List<Pedido> buscarTodos();
+
 }
